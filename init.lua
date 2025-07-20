@@ -1,7 +1,7 @@
 --
--- Open file explorera
-vim.keymap.set('n', '<C-f>', '<cmd>Lexplore<CR>')
-
+-- Open file explore
+vim.keymap.set('n', '<C-f>', '<cmd>Lexplore<CR>', { desc = 'left explore' })
+vim.keymap.set('n', '<C-t>', '<cmd>Texplore<CR>', { desc = 'tab explore' })
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -90,6 +90,20 @@ vim.o.confirm = true
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+
+-- test lol
+local opts = { noremap = true, silent = true }
+
+local function quickfix()
+  vim.lsp.buf.code_action {
+    filter = function(a)
+      return a.isPreferred
+    end,
+    apply = true,
+  }
+end
+
+vim.keymap.set('n', '<leader>qf', quickfix, opts)
 
 -- tabs keybinds
 -- next tab
@@ -183,6 +197,12 @@ rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+  -- autocomplete for brackets
+  {
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
+    config = true,
+  },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -953,6 +973,5 @@ require('lazy').setup({
     },
   },
 })
-
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
